@@ -16,12 +16,12 @@ const autoLauncher = new AutoLaunch({
 
 serve({ scheme: 'dolem', directory: path.join(__dirname, 'dist') });
 
+const icon = nativeImage.createFromPath(path.resolve(__dirname, '../public/favicon.ico'));
+
 const proxyUrl = `http://localhost:${PROXY_PORT}`;
 let win, notifications, tray = null;
 
 function createWindow() {
-    const icon = nativeImage.createFromPath(`${__dirname}/src/assets/img/icon.ico`);
-
     win = new BrowserWindow({
         height: 530,
         width: 350,
@@ -57,8 +57,6 @@ function createWindow() {
 }
 
 function createNotifications() {
-    const icon = nativeImage.createFromPath(`${__dirname}/src/assets/img/icon.png`);
-
     notifications = {
         on: new Notification({
             title: APP_NAME,
@@ -74,7 +72,6 @@ function createNotifications() {
 }
 
 function createTray() {
-    const icon = nativeImage.createFromPath(`${__dirname}/src/assets/img/icon.ico`);
     tray = new Tray(icon);
 
     const contextMenu = Menu.buildFromTemplate([

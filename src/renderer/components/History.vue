@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { Shield } from '@/services';
+import { Shield } from '../services';
 
 export default {
     name: 'History',
@@ -66,8 +66,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/styles/variables.scss';
-
 .history {
     position: relative;
     height: calc(100vh - #{$header-height});

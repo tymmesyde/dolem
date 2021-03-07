@@ -16,7 +16,7 @@ import Toggle from './components/Toggle.vue';
 import Status from './components/Status.vue';
 import History from './components/History.vue';
 
-import { Electron } from '@/services';
+import { Electron } from './services';
 
 export default {
 	name: 'App',

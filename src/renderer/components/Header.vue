@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { Electron } from '@/services';
+import { Electron } from '../services';
 
 export default {
     name: 'Header',
@@ -23,8 +23,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/styles/variables.scss';
-
 .header {
     z-index: 1;
     position: sticky;

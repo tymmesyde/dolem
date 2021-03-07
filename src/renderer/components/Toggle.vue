@@ -15,8 +15,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/styles/variables.scss';
-
 .toggle {
     display: flex;
     align-items: center;
