@@ -1,0 +1,60 @@
+@import './variables.scss';
+
+@font-face {
+    font-family: 'Montserrat-Regular';
+    src: url('./assets/fonts/Montserrat/Montserrat-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat-SemiBold';
+    src: url('./assets/fonts/Montserrat/Montserrat-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat-Bold';
+    src: url('./assets/fonts/Montserrat/Montserrat-Bold.ttf');
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    overflow-y: overlay;
+    color: transparent;
+    transition: color .3s ease;
+    border-radius: 1vh;
+
+    &:hover {
+        color: rgba($text-color, 0.2);
+    }
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.success {
+    color: $success-color;
+}
+
+.danger {
+    color: $danger-color;
+}
