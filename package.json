@@ -5,7 +5,7 @@
   "main": "src/main",
   "author": "tymmesyde",
   "scripts": {
-    "start": "run-p vue:serve electron:serve",
+    "serve": "run-p vue:serve electron:serve",
     "vue:serve": "vue-cli-service serve --port 9000",
     "vue:build": "vue-cli-service build",
     "vue:lint": "vue-cli-service lint",
