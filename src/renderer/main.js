@@ -1,12 +1,8 @@
-import Vue from 'vue';
-import VueScrollTo from 'vue-scrollto';
+import { createApp } from 'vue';
 import App from './App.vue';
 
-Vue.use(VueScrollTo);
+import VueScrollTo from 'vue-scrollto';
 
-Vue.config.productionTip = false;
-Vue.config.ignoredElements = ['ion-icon'];
-
-new Vue({
-  render: h => h(App),
-}).$mount('#app');
+createApp(App)
+  .use(VueScrollTo)
+  .mount('#app');

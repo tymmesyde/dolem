@@ -1,15 +1,16 @@
 <template>
-    <div class="toggle" @click="$emit('input', !value)">
-        <ion-icon name="toggle" v-show="value" class="success"></ion-icon>
-        <ion-icon name="toggle-outline" class="flip" v-show="!value"></ion-icon>
+    <div class="toggle" @click="$emit('update:modelValue', !modelValue)">
+        <ion-icon name="toggle" v-show="modelValue" class="success"></ion-icon>
+        <ion-icon name="toggle-outline" class="flip" v-show="!modelValue"></ion-icon>
     </div>
 </template>
 
 <script>
 export default {
     name: 'Toggle',
+    emits: ['update:modelValue'],
     props: {
-        value: Boolean
+        modelValue: Boolean
     }
 }
 </script>

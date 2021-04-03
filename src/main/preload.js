@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, remote } = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 const { EventEmitter } = require('events');
 
 const shieldEvents = new EventEmitter();
@@ -8,8 +8,6 @@ ws.onmessage = ({ data }) => {
     const { name, payload } = JSON.parse(data);
     shieldEvents.emit(name, payload);
 };
-
-const browserWindow = remote.getCurrentWindow();
 
 function sendEvent(name, arg) {
     return new Promise(resolve => {
@@ -25,8 +23,14 @@ contextBridge.exposeInMainWorld('electron',
         hideWindow: () => sendEvent('hideWindow'),
         toggleWindow: () => sendEvent('toggleWindow'),
         toggleProxy: (arg) => sendEvent('toggleProxy', arg),
-        onWindowShow: (listener) => browserWindow.on('show', listener),
-        onWindowHide: (listener) => browserWindow.on('close', listener)
+        onWindowShow: listener => {
+            ipcRenderer.on('onWindowShow', listener);
+            ipcRenderer.send('onWindowShow');
+        },
+        onWindowHide: listener => {
+            ipcRenderer.on('onWindowHide', listener);
+            ipcRenderer.send('onWindowHide');
+        }
     }
 );
 

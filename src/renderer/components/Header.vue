@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <div class="title" @click="hideWindow()">
+        <div class="title" @click="$emit('hideWindow')">
             <img src="../assets/img/icon.png" alt="" class="icon">
             dolem
         </div>
@@ -10,15 +10,9 @@
 </template>
 
 <script>
-import { Electron } from '../services';
-
 export default {
     name: 'Header',
-    methods: {
-        hideWindow() {
-            Electron.toggleWindow();
-        }
-    }
+    emits: ['hideWindow']
 }
 </script>
 

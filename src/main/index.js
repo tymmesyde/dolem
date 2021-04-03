@@ -147,3 +147,5 @@ ipcMain.on('toggleAutoLaunch', async (event, state) => {
 
 ipcMain.on('toggleWindow', () => toggleWindow());
 ipcMain.on('hideWindow', () => win.hide());
+ipcMain.on('onWindowShow', (event) => win.on('show', () => event.sender.send('onWindowShow')));
+ipcMain.on('onWindowHide', (event) => win.on('close', () => event.sender.send('onWindowHide')));

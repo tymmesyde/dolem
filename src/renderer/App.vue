@@ -1,12 +1,14 @@
-<template>
-	<div id="app" :class="{ 'slide-up': show, 'slide-down': !show }">
-		<Header>
+<template class="hide">
+	<div id="app-container" :class="{ 'slide-up': show, 'slide-down': !show }">
+
+		<Header @hideWindow="toggleWindow()">
 			<Toggle v-model="toggle" class="toggle"></Toggle>
 		</Header>
 
 		<Status v-model="toggle"/>
 
 		<History/>
+
 	</div>
 </template>
 
@@ -37,6 +39,11 @@ export default {
 			show: true
 		}
 	},
+	methods: {
+		async toggleWindow() {
+			Electron.toggleWindow();
+		}
+	},
 	mounted() {
 		Electron.onWindowShow(() => {
 			this.show = true;
@@ -52,7 +59,7 @@ export default {
 <style lang="scss">
 @import './assets/styles/main.scss';
 
-#app {
+#app-container {
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 	height: 100%;

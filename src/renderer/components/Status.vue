@@ -1,11 +1,11 @@
 <template>
     <div class="status">
-        <div v-show="value">
+        <div v-show="modelValue">
             <ion-icon name="shield-checkmark-outline" class="success"></ion-icon>
             <div>Protected</div>
         </div>
 
-        <div v-show="!value">
+        <div v-show="!modelValue">
             <ion-icon name="close-circle-outline" class="danger"></ion-icon>
             <div>Disabled</div>
         </div>
@@ -16,7 +16,7 @@
 export default {
     name: 'Status',
     props: {
-        value: Boolean
+        modelValue: Boolean
     }
 }
 </script>
