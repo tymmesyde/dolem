@@ -7,21 +7,18 @@ const Positioner = require('electron-positioner')
 const server = require('./server.js');
 const { APP_NAME, PROXY_PORT } = require('./config');
 
-const args = process.argv.slice(1),
-    dev = args.some(val => val === '--dev');
+const { dev, port } = require('minimist')(process.argv.slice(2));
+const loadURL = serve({ scheme: 'dolem', directory: path.join(__dirname, 'dist') });
+const icon = nativeImage.createFromPath(path.resolve(__dirname, '../public/favicon.ico'));
+const proxyUrl = `http://localhost:${PROXY_PORT}`;
 
 const autoLauncher = new AutoLaunch({
     name: APP_NAME
 });
 
-serve({ scheme: 'dolem', directory: path.join(__dirname, 'dist') });
-
-const icon = nativeImage.createFromPath(path.resolve(__dirname, '../public/favicon.ico'));
-
-const proxyUrl = `http://localhost:${PROXY_PORT}`;
 let win, notifications, tray = null;
 
-function createWindow() {
+async function createWindow() {
     win = new BrowserWindow({
         height: 530,
         width: 350,
@@ -42,8 +39,7 @@ function createWindow() {
     win.setMenu(null);
     win.on('close', event => event.preventDefault());
 
-    const url = dev ? 'http://localhost:9000' : 'dolem://-';
-    win.loadURL(url);
+    dev ? win.loadURL(`http://localhost:${port}`) : await loadURL(win);
 
     if (dev) {
         try {
@@ -53,6 +49,8 @@ function createWindow() {
         } catch (_) {}
         
         win.webContents.openDevTools();
+    } else {
+        autoLauncher.enable();
     }
 }
 
@@ -117,13 +115,16 @@ function warnBeforeQuit() {
     });
 }
 
-app.whenReady().then(createNotifications).then(server.start).then(createWindow).then(createTray).then(setPosition);
+app.whenReady()
+    .then(createNotifications)
+    .then(server.start)
+    .then(createWindow)
+    .then(createTray)
+    .then(setPosition);
 
 app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
-    }
-})
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
 
 ipcMain.on('toggleProxy', async (event, state) => {
     if (state) {
@@ -138,12 +139,7 @@ ipcMain.on('toggleProxy', async (event, state) => {
     }
     
     event.reply('toggleProxy', state);
-})
-
-ipcMain.on('toggleAutoLaunch', async (event, state) => {
-    state ? autoLauncher.enable() : autoLauncher.disable();
-    event.reply('toggleAutoLaunch', state);
-})
+});
 
 ipcMain.on('toggleWindow', () => toggleWindow());
 ipcMain.on('hideWindow', () => win.hide());

@@ -19,6 +19,7 @@
     "electron-positioner": "^4.1.0",
     "electron-serve": "^1.1.0",
     "http-proxy": "^1.18.1",
+    "minimist": "^1.2.5",
     "proxy-settings-manager": "^0.2.1",
     "vue": "^3.0.0",
     "vue-scrollto": "^2.20.0"
