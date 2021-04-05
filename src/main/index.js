@@ -16,6 +16,8 @@ const autoLauncher = new AutoLaunch({
     name: APP_NAME
 });
 
+app.setAppUserModelId(APP_NAME);
+
 let win, notifications, tray = null;
 
 async function createWindow() {
