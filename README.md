@@ -13,3 +13,13 @@ npm install
 ```
 npm run serve
 ```
+
+### Build main & renderer
+```
+npm run build
+```
+
+### Package application for current platform
+```
+npm run package
+```
