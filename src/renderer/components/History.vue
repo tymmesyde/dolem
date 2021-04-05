@@ -46,7 +46,7 @@ export default {
         },
         handleBlockedEvent(hostname) {
             if (this.history[hostname]) this.history[hostname]++;
-            else this.$set(this.history, hostname, 1);
+            else this.history[hostname] = 1;
         },
         store() {
             clearTimeout(this.storeTimeout);
