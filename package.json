@@ -6,9 +6,12 @@
   "author": "tymmesyde",
   "scripts": {
     "serve": "cross-env PORT=9000 run-p vue:serve electron:serve",
+    "build": "run-s vue:build electron:build",
+    "package": "node scripts/package",
     "vue:serve": "cross-env-shell vue-cli-service serve --port $PORT",
     "vue:build": "vue-cli-service build",
-    "electron:serve": "cross-env-shell wait-on http-get://localhost:$PORT && cross-env-shell electron . --dev --port $PORT"
+    "electron:serve": "cross-env-shell wait-on http-get://localhost:$PORT && cross-env-shell electron . --dev --port $PORT",
+    "electron:build": "node scripts/build.electron"
   },
   "dependencies": {
     "@ionic/core": "^5.6.3",
@@ -20,7 +23,7 @@
     "electron-serve": "^1.1.0",
     "http-proxy": "^1.18.1",
     "minimist": "^1.2.5",
-    "proxy-settings-manager": "^0.2.1",
+    "proxy-settings-manager": "^0.2.3",
     "vue": "^3.0.0",
     "vue-scrollto": "^2.20.0"
   },
@@ -30,14 +33,17 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
+    "create-file-webpack": "^1.0.2",
     "cross-env": "^7.0.3",
     "electron": "^12.0.0",
+    "electron-packager": "^15.2.0",
     "electron-reloader": "^1.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-0",
     "npm-run-all": "^4.1.5",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
-    "wait-on": "^5.2.1"
+    "wait-on": "^5.2.1",
+    "webpack": "^4.46.0"
   }
 }
