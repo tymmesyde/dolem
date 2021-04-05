@@ -9,7 +9,7 @@ const { APP_NAME, PROXY_PORT } = require('./config');
 
 const { dev, port } = require('minimist')(process.argv.slice(2));
 const loadURL = serve({ scheme: 'dolem', directory: path.join(app.getAppPath(), 'renderer') });
-const icon = nativeImage.createFromPath(path.resolve(__dirname, '../public/favicon.ico'));
+const icon = nativeImage.createFromPath(path.resolve(__dirname, 'res/icon.ico'));
 const proxyUrl = `http://localhost:${PROXY_PORT}`;
 
 const autoLauncher = new AutoLaunch({

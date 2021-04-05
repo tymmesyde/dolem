@@ -1,5 +1,6 @@
 const path = require('path');
 const CreateFileWebpack = require('create-file-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const outDir = path.join(__dirname, '../dist');
 
@@ -24,7 +25,11 @@ module.exports = [
                 content: JSON.stringify({
                     main: 'main.js'
                 })
-            })
+            }),
+            new CopyWebpackPlugin([{
+                from: path.join(__dirname, '../src/main/res'),
+                to: path.join(outDir, 'res')
+            }])
         ]
     },
     {

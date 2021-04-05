@@ -4,7 +4,7 @@ module.exports = {
         index: {
             title: 'Dolem',
             entry: 'src/renderer/main.js',
-            template: 'src/public/index.html'
+            template: 'src/renderer/public/index.html'
         }
     },
     css: {

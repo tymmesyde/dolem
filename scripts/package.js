@@ -8,7 +8,7 @@ function package() {
         overwrite: true,
         asar: true,
         name: 'Dolem',
-        icon: path.join(__dirname, '../src/public/favicon.ico')
+        icon: path.join(__dirname, '../dist/res/icon.ico')
     });
 }
 
