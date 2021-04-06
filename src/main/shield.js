@@ -4,21 +4,15 @@ const net = require('net');
 const util = require('util');
 const httpProxy = require('http-proxy');
 const axios = require('axios');
-const WebSocket = require('ws');
+const { EventEmitter } = require('events');
 const proxySettings = require('proxy-settings-manager');
 
-WebSocket.Server.prototype.sendEvent = function (name, payload) {
-    const event = {
-        name,
-        payload
-    };
-    this.clients.forEach(c => c.send(JSON.stringify(event)));
-}
+class Shield extends EventEmitter {
 
-class Shield {
+    constructor(port, blocklist) {
+        super();
 
-    constructor(proxy_port, blocklist) {
-        this.proxy_port = proxy_port;
+        this.port = port;
         this.blocklist = blocklist;
         this.hostslist = [];
         this.wss = null;
@@ -73,30 +67,25 @@ class Shield {
 
     _destroyIfBlacklisted(stream, hostname) {
         if (this.hostslist.includes(hostname)) {
-            this.wss.sendEvent('blocked', { hostname });
+            this.emit('blocked', { hostname });
             stream.destroy();
         }
     }
 
-    async start(port) {
+    async start() {
         this.hostslist = await this._createHostsList();
-
-        this.wss = new WebSocket.Server({
-            port
-        });
 
         this.server = http.createServer(this._handleHttpRequest.bind(this));
         this.server.on('connect', this._handleHttpsRequest.bind(this));
-        this.server.listen(this.proxy_port);
+        this.server.listen(this.port);
     }
 
-    async stop() {
-        await util.promisify(this.server.close);
-        await util.promisify(this.wss.close);
+    stop() {
+        return util.promisify(this.server.close);
     }
 
     async activate() {
-        const proxyUrl = `http://localhost:${this.proxy_port}`;
+        const proxyUrl = `http://localhost:${this.port}`;
 
         await proxySettings.setHttp(proxyUrl);
         await proxySettings.setHttps(proxyUrl);

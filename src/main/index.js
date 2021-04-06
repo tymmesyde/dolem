@@ -5,7 +5,7 @@ const serve = require('electron-serve');
 const Positioner = require('electron-positioner')
 
 const Shield = require('./shield.js');
-const { APP_NAME, WS_PORT, PROXY_PORT, BLOCKLIST } = require('./config');
+const { APP_NAME, PROXY_PORT, BLOCKLIST } = require('./config');
 
 const { dev, port } = require('minimist')(process.argv.slice(2));
 const loadURL = serve({ scheme: 'dolem', directory: path.join(app.getAppPath(), 'renderer') });
@@ -119,7 +119,7 @@ function warnBeforeQuit() {
 }
 
 function createIpcEvents() {
-    ipcMain.on('toggleProxy', async (event, state) => {
+    ipcMain.handle('toggleProxy', async (event, state) => {
         if (state) {
             await shield.activate();
             notifications.on.show();
@@ -128,19 +128,21 @@ function createIpcEvents() {
             notifications.off.show();
         }
 
-        event.reply('toggleProxy', state);
+        return state;
     });
 
-    ipcMain.on('toggleWindow', () => toggleWindow());
-    ipcMain.on('hideWindow', () => win.hide());
+    ipcMain.handle('toggleWindow', () => toggleWindow());
+    ipcMain.handle('hideWindow', () => win.hide());
     ipcMain.on('onWindowShow', (event) => win.on('show', () => event.sender.send('onWindowShow')));
     ipcMain.on('onWindowHide', (event) => win.on('close', () => event.sender.send('onWindowHide')));
+
+    ipcMain.on('onBlocked', (event) => shield.on('blocked', payload => event.sender.send('onBlocked', payload)));
 }
 
 app.whenReady()
     .then(createIpcEvents)
     .then(createNotifications)
-    .then(shield.start(WS_PORT))
+    .then(shield.start())
     .then(createWindow)
     .then(createTray)
     .then(setPosition);

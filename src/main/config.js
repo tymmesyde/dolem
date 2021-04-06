@@ -1,6 +1,5 @@
 module.exports = {
     APP_NAME: 'Dolem',
-    WS_PORT: 7777,
     PROXY_PORT: 5050,
     BLOCKLIST: {
         adaway: 'https://raw.githubusercontent.com/hectorm/hmirror/master/data/adaway.org/list.txt',
