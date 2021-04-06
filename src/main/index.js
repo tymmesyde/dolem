@@ -2,15 +2,14 @@ const path = require('path');
 const { app, BrowserWindow, ipcMain, Notification, Tray, Menu, nativeImage, dialog  } = require('electron');
 const AutoLaunch = require('auto-launch');
 const serve = require('electron-serve');
-const proxySettings = require('proxy-settings-manager');
 const Positioner = require('electron-positioner')
-const server = require('./server.js');
-const { APP_NAME, PROXY_PORT } = require('./config');
+
+const Shield = require('./shield.js');
+const { APP_NAME, WS_PORT, PROXY_PORT, BLOCKLIST } = require('./config');
 
 const { dev, port } = require('minimist')(process.argv.slice(2));
 const loadURL = serve({ scheme: 'dolem', directory: path.join(app.getAppPath(), 'renderer') });
 const icon = nativeImage.createFromPath(path.resolve(__dirname, 'res/icon.ico'));
-const proxyUrl = `http://localhost:${PROXY_PORT}`;
 
 const autoLauncher = new AutoLaunch({
     name: APP_NAME
@@ -19,6 +18,7 @@ const autoLauncher = new AutoLaunch({
 app.setAppUserModelId(APP_NAME);
 
 let win, notifications, tray = null;
+const shield = new Shield(PROXY_PORT, BLOCKLIST);
 
 async function createWindow() {
     win = new BrowserWindow({
@@ -80,8 +80,9 @@ function createTray() {
             click: async () => {
                 const { response } = await warnBeforeQuit();
                 if (response === 0) {
-                    await proxySettings.remove();
-                    server.stop();
+                    await shield.disable();
+                    await shield.stop();
+
                     notifications.off.show();
                     app.exit();
                 }
@@ -117,9 +118,29 @@ function warnBeforeQuit() {
     });
 }
 
+function createIpcEvents() {
+    ipcMain.on('toggleProxy', async (event, state) => {
+        if (state) {
+            await shield.activate();
+            notifications.on.show();
+        } else {
+            await shield.disable();
+            notifications.off.show();
+        }
+
+        event.reply('toggleProxy', state);
+    });
+
+    ipcMain.on('toggleWindow', () => toggleWindow());
+    ipcMain.on('hideWindow', () => win.hide());
+    ipcMain.on('onWindowShow', (event) => win.on('show', () => event.sender.send('onWindowShow')));
+    ipcMain.on('onWindowHide', (event) => win.on('close', () => event.sender.send('onWindowHide')));
+}
+
 app.whenReady()
+    .then(createIpcEvents)
     .then(createNotifications)
-    .then(server.start)
+    .then(shield.start(WS_PORT))
     .then(createWindow)
     .then(createTray)
     .then(setPosition);
@@ -127,23 +148,3 @@ app.whenReady()
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
-
-ipcMain.on('toggleProxy', async (event, state) => {
-    if (state) {
-        await proxySettings.setHttp(proxyUrl);
-        await proxySettings.setHttps(proxyUrl);
-
-        notifications.on.show();
-    } else {
-        await proxySettings.remove();
-
-        notifications.off.show();
-    }
-    
-    event.reply('toggleProxy', state);
-});
-
-ipcMain.on('toggleWindow', () => toggleWindow());
-ipcMain.on('hideWindow', () => win.hide());
-ipcMain.on('onWindowShow', (event) => win.on('show', () => event.sender.send('onWindowShow')));
-ipcMain.on('onWindowHide', (event) => win.on('close', () => event.sender.send('onWindowHide')));
