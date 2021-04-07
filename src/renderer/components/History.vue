@@ -17,7 +17,7 @@
                         {{ hostname }}
                     </div>
                     <div class="hits">
-                        {{ hits > 99 ? hits + '+' : hits }}
+                        {{ hits > 99 ? '99+' : hits }}
                     </div>
                 </div>
             </div>
