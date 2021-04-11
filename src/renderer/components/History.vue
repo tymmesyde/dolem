@@ -11,16 +11,18 @@
         </div>
 
         <div class="content" v-else>
-            <div class="list">
+            <transition-group name="flip-list" class="list" tag="div">
                 <div class="item" v-for="[hostname, hits] in sortedHistory" :key="hostname">
                     <div class="hostname">
                         {{ hostname }}
                     </div>
-                    <div class="hits">
-                        {{ hits > 99 ? '99+' : hits }}
-                    </div>
+                    <transition name="bump" mode="out-in">
+                        <div class="hits" :key="hits">
+                            {{ hits > 99 ? '99+' : hits }}
+                        </div>
+                    </transition>
                 </div>
-            </div>
+            </transition-group>
 
             <Button icon="trash" @click="clear()">
                 CLEAR
@@ -164,5 +166,17 @@ export default {
             }
         }
     }
+}
+
+.flip-list-move {
+  transition: transform 0.8s ease;
+}
+
+.bump-enter-active,
+.bump-leave-active {
+  transition: all .3s ease-in-out;
+}
+.bump-enter, .bump-leave-to {
+  transform: scale(1.1);
 }
 </style>
