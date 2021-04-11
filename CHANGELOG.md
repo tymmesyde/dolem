@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/tymmesyde/dolem/compare/v0.1.1...v0.1.2) (2021-04-11)
+
+
+### Features
+
+* add clear history button ([45a15e1](https://github.com/tymmesyde/dolem/commit/45a15e1f7f13beb92a829fe193c0180331deb013))
+
+
+### Bug Fixes
+
+* **renderer:** hits greater than 99 in history were not displayed correctly ([af228cb](https://github.com/tymmesyde/dolem/commit/af228cbff847f38cc69acdde3b41dac06916cbf8))
+
 ### 0.1.1 (2021-04-05)
 
 
