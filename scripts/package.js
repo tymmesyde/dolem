@@ -8,6 +8,7 @@ function package() {
         overwrite: true,
         asar: true,
         name: 'Dolem',
+        appCopyright: 'tymmesyde',
         icon: path.join(__dirname, '../dist/res/icon.ico')
     });
 }
